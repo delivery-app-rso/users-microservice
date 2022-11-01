@@ -1,5 +1,5 @@
 kumuluzee:
-  name: image-catalog-service
+  name: items-microservice-service
   env:
     name: dev
   version: 1.0.0
@@ -8,8 +8,8 @@ kumuluzee:
     http:
       port: 8080
   datasources:
-    - jndi-name: jdbc/ImageMetadataDS
-      connection-url: jdbc:postgresql://localhost:5432/image-metadata
+    - jndi-name: jdbc/ItemDS
+      connection-url: jdbc:postgresql://postgres:5432/items-db
       username: dbuser
       password: postgres
       max-pool-size: 20

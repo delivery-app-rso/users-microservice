@@ -1,13 +1,11 @@
-FROM adoptopenjdk:15-jre-hotspot
-
-RUN mkdir /app
-
+FROM maven:3.8.6-openjdk-18 AS build
+COPY ./ /app
 WORKDIR /app
+RUN mvn --show-version --update-snapshots --batch-mode clean package
 
-ADD ./api/target/image-catalog-api-1.0.0-SNAPSHOT.jar /app
-
+FROM eclipse-temurin:18-jre
+RUN mkdir /app
+WORKDIR /app
+COPY --from=build ./app/api/target/items-microservice-api-1.0.0-SNAPSHOT.jar /app
 EXPOSE 8080
-
-CMD ["java", "-jar", "image-catalog-api-1.0.0-SNAPSHOT.jar"]
-#ENTRYPOINT ["java", "-jar", "image-catalog-api-1.0.0-SNAPSHOT.jar"]
-#CMD java -jar image-catalog-api-1.0.0-SNAPSHOT.jar
+CMD ["java", "-jar", "items-microservice-api-1.0.0-SNAPSHOT.jar"]

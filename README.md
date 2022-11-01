@@ -1,23 +1,9 @@
 # RSO: Image metadata microservice
 
-## Prerequisites
+## How to run
 
-```bash
-docker run -d --name pg-image-metadata -e POSTGRES_USER=dbuser -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=image-metadata -p 5432:5432 postgres:13
-```
+1. Create a .env copy from .env.example and fill it.`DB_HOST` and `DB_NAME` properties must match the ones in api/src/main/resources/config.yaml (eq. `jdbc:postgresql://[DB_HOST]:5432/[DB_NAME]`). Same goes for `POSTGRES_USER` and `LOCAL_PORT` property defines on which port the api will be accessible.
 
-## Build and run commands
-```bash
-mvn clean package
-cd api/target
-java -jar image-catalog-api-1.0.0-SNAPSHOT.jar
-```
-Available at: localhost:8080/v1/images
+2. Run `docker-compose --env-file [created .env file name] up --build -d`
 
-## Docker commands
-```bash
-docker build -t novaslika .   
-docker images
-docker run novaslika    
-docker tag novaslika prporso/novaslika   
-docker push prporso/novaslika  
+3. Microservice is now accessible on http://127.0.0.1:[defined PORT]/v1/

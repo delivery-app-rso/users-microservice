@@ -3,12 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>image-catalog</artifactId>
-        <groupId>si.fri.rso.samples</groupId>
+        <artifactId>items-microservice</artifactId>
+        <groupId>si.fri.rso</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>image-catalog-api</artifactId>
+    <artifactId>items-microservice-api</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.kumuluz.ee</groupId>
@@ -28,15 +28,11 @@
             <groupId>com.kumuluz.ee.openapi</groupId>
             <artifactId>kumuluzee-openapi-mp</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.kumuluz.ee.openapi</groupId>
-            <artifactId>kumuluzee-openapi-mp-ui</artifactId>
-        </dependency>
 
 
         <dependency>
-            <groupId>si.fri.rso.samples</groupId>
-            <artifactId>image-catalog-services</artifactId>
+            <groupId>si.fri.rso</groupId>
+            <artifactId>items-microservice-services</artifactId>
         </dependency>
 
     </dependencies>
