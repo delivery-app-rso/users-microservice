@@ -1,5 +1,4 @@
 kumuluzee:
-  name: items-microservice-service
   env:
     name: dev
   version: 1.0.0
@@ -9,7 +8,4 @@ kumuluzee:
       port: 8080
   datasources:
     - jndi-name: jdbc/ItemDS
-      connection-url: jdbc:postgresql://postgres:5432/items-db
-      username: dbuser
-      password: postgres
       max-pool-size: 20
