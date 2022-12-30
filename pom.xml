@@ -3,64 +3,36 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>si.fri.rso</groupId>
     <artifactId>items-microservice</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-
     <packaging>pom</packaging>
-
     <modules>
         <module>api</module>
         <module>services</module>
         <module>models</module>
         <module>lib</module>
-        <module>tests</module>
     </modules>
-
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <kumuluzee.version>4.1.0</kumuluzee.version>
         <kumuluzee-rest.version>1.5.1</kumuluzee-rest.version>
         <kumuluzee-openapi-mp.version>1.4.0</kumuluzee-openapi-mp.version>
         <kumuluzee-config-mp.version>2.0.0</kumuluzee-config-mp.version>
+        <kumuluzee-config.version>1.3.0</kumuluzee-config.version>
+        <kumuluzee-health.version>2.4.4</kumuluzee-health.version>
+        <kumuluzee-metrics.version>2.3.0</kumuluzee-metrics.version>
+        <kumuluzee-discovery.version>1.2.0-SNAPSHOT</kumuluzee-discovery.version>
+        <kumuluzee-logs.version>1.4.6</kumuluzee-logs.version>
+        <aws-java-sdk.version>1.12.350</aws-java-sdk.version>
+        <kumuluzee-fault-tolerance.version>2.1.1</kumuluzee-fault-tolerance.version>
+        <kumuluzee-rest-client.version>2.0.0</kumuluzee-rest-client.version>
+        <kumuluzee-graphql.version>1.1.0</kumuluzee-graphql.version>
+        <kumuluzee-streaming.version>1.2.2</kumuluzee-streaming.version>
         <postgresql.version>42.5.0</postgresql.version>
-        <arquillian.version>1.6.0.Final</arquillian.version>
-        <shrinkwrap.version>1.2.6</shrinkwrap.version>
-        <shrinkwrap.resolver.version>3.1.4</shrinkwrap.resolver.version>
-
-        <junit.version>4.13.1</junit.version>
-        <rest-assured.version>4.3.3</rest-assured.version>
-
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <nexus.staging.plugin.version>1.6.8</nexus.staging.plugin.version>
-        <gpg.plugin.version>1.6</gpg.plugin.version>
     </properties>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>sonatype-snapshots</id>
-            <name>OSS Sonatype repo (snapshots)</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -70,88 +42,51 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <dependency>
-                <groupId>com.kumuluz.ee.config</groupId>
-                <artifactId>kumuluzee-config-mp</artifactId>
-                <version>${kumuluzee-config-mp.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.kumuluz.ee.rest</groupId>
                 <artifactId>kumuluzee-rest-core</artifactId>
                 <version>${kumuluzee-rest.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-runtime</artifactId>
-                <version>2.3.3</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.kumuluz.ee.openapi</groupId>
                 <artifactId>kumuluzee-openapi-mp</artifactId>
                 <version>${kumuluzee-openapi-mp.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.kumuluz.ee.openapi</groupId>
                 <artifactId>kumuluzee-openapi-mp-ui</artifactId>
                 <version>${kumuluzee-openapi-mp.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>com.kumuluz.ee.config</groupId>
+                <artifactId>kumuluzee-config-mp</artifactId>
+                <version>${kumuluzee-config-mp.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                <artifactId>shrinkwrap-resolver-depchain</artifactId>
-                <version>${shrinkwrap.resolver.version}</version>
-                <type>pom</type>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.shrinkwrap</groupId>
-                <artifactId>shrinkwrap-impl-base</artifactId>
-                <version>${shrinkwrap.version}</version>
+                <groupId>com.kumuluz.ee.config</groupId>
+                <artifactId>kumuluzee-config-consul</artifactId>
+                <version>${kumuluzee-config.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kumuluz.ee</groupId>
-                <artifactId>kumuluzee-cdi-weld</artifactId>
-                <version>${kumuluzee.version}</version>
-            </dependency>
-
-            <!-- Dependencies required for tests -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.1</version>
+                <groupId>com.kumuluz.ee.health</groupId>
+                <artifactId>kumuluzee-health</artifactId>
+                <version>${kumuluzee-health.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.rest-assured</groupId>
-                <artifactId>rest-assured</artifactId>
-                <version>${rest-assured.version}</version>
+                <groupId>com.kumuluz.ee.metrics</groupId>
+                <artifactId>kumuluzee-metrics-core</artifactId>
+                <version>${kumuluzee-metrics.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
+                <groupId>com.kumuluz.ee.discovery</groupId>
+                <artifactId>kumuluzee-discovery-consul</artifactId>
+                <version>${kumuluzee-discovery.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>si.fri.rso</groupId>
                 <artifactId>items-microservice-api</artifactId>
@@ -172,58 +107,6 @@
                 <artifactId>items-microservice-lib</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>si.fri.rso</groupId>
-                <artifactId>items-microservice-tests</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus.staging.plugin.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>deploy</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${gpg.plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
 </project>

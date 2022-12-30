@@ -6,6 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.UriInfo;
+
+import org.eclipse.microprofile.metrics.annotation.Timed;
+
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,7 +20,6 @@ import si.fri.rso.itemsmicroservice.lib.Item;
 import si.fri.rso.itemsmicroservice.models.converters.ItemConverter;
 import si.fri.rso.itemsmicroservice.models.entities.ItemEntity;
 
-
 @RequestScoped
 public class ItemBean {
 
@@ -26,6 +28,7 @@ public class ItemBean {
     @Inject
     private EntityManager em;
 
+    @Timed
     public List<Item> getItem() {
 
         TypedQuery<ItemEntity> query = em.createNamedQuery(
@@ -67,8 +70,7 @@ public class ItemBean {
             beginTx();
             em.persist(itemEntity);
             commitTx();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             rollbackTx();
         }
 
@@ -94,8 +96,7 @@ public class ItemBean {
             updatedItemEntity.setId(c.getId());
             updatedItemEntity = em.merge(updatedItemEntity);
             commitTx();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             rollbackTx();
         }
 
@@ -111,12 +112,10 @@ public class ItemBean {
                 beginTx();
                 em.remove(itemEntity);
                 commitTx();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 rollbackTx();
             }
-        }
-        else {
+        } else {
             return false;
         }
 

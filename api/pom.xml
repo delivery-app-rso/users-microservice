@@ -18,27 +18,34 @@
             <groupId>com.kumuluz.ee</groupId>
             <artifactId>kumuluzee-servlet-jetty</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.kumuluz.ee.config</groupId>
             <artifactId>kumuluzee-config-mp</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.kumuluz.ee.openapi</groupId>
             <artifactId>kumuluzee-openapi-mp</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.kumuluz.ee.openapi</groupId>
             <artifactId>kumuluzee-openapi-mp-ui</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.kumuluz.ee.config</groupId>
+            <artifactId>kumuluzee-config-consul</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.health</groupId>
+            <artifactId>kumuluzee-health</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kumuluz.ee.discovery</groupId>
+            <artifactId>kumuluzee-discovery-consul</artifactId>
+        </dependency>
         <dependency>
             <groupId>si.fri.rso</groupId>
             <artifactId>items-microservice-services</artifactId>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
