@@ -5,7 +5,7 @@ kumuluzee:
   version: 1.0.0
   server:
     http:
-      port: 8081
+      port: 8080
   datasources:
     - jndi-name: jdbc/ItemDS
       connection-url: jdbc:postgresql://localhost:5432/rso_db
@@ -21,19 +21,14 @@ kumuluzee:
       disk-space-health-check:
         threshold: 100000000
   metrics:
-      servlet:
-        enabled: true
-        mapping: /metrics
-      web-instrumentation:
-        - name: items-endpoint
-          url-pattern: /v1/images/*
+    servlet:
+      enabled: true
+      mapping: /metrics
+    web-instrumentation:
+      - name: items-endpoint
+        url-pattern: /v1/images/*
   config:
     start-retry-delay-ms: 500
     max-retry-delay-ms: 900000
-    consul:
-      agent: http://localhost:8500
-  discovery:
-    ttl: 20
-    ping-interval: 15
     consul:
       agent: http://localhost:8500

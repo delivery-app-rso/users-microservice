@@ -9,9 +9,6 @@ import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.info.License;
 import org.eclipse.microprofile.openapi.annotations.servers.Server;
 
-import com.kumuluz.ee.discovery.annotations.RegisterService;
-
-@RegisterService
 @OpenAPIDefinition(info = @Info(title = "Items API", version = "v1", contact = @Contact(email = "rso@fri.uni-lj.si"), license = @License(name = "dev"), description = "API for managing items."), servers = @Server(url = "http://localhost:8080/"))
 @ApplicationPath("/v1")
 public class ItemsApplication extends Application {
