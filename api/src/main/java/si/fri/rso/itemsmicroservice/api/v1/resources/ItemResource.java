@@ -48,6 +48,14 @@ public class ItemResource {
                 return Response.status(Response.Status.OK).entity(itemsMetadata).build();
         }
 
+        @Operation(description = "Get status", summary = "Get status")
+        @APIResponses({ @APIResponse(responseCode = "200", description = "status") })
+        @GET
+        @Path("/status")
+        public Response getStatus() {
+                return Response.status(Response.Status.OK).build();
+        }
+
         @Operation(description = "Get item.", summary = "Get item")
         @APIResponses({
                         @APIResponse(responseCode = "200", description = "Item data", content = @Content(schema = @Schema(implementation = Item.class))) })

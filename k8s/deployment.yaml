@@ -26,31 +26,36 @@ spec:
                 secretKeyRef:
                   name: gke-rso-secrets
                   key: db_name
-            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-              value: jdbc:postgresql://${DB_HOST}:5432/${DB-NAME}
-            - name: KUMULUZEE_DATASOURCES0_USERNAME
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: gke-rso-secrets
                   key: db_user
-            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+            - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: gke-rso-secrets
                   key: db_pass
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://${DB_HOST}/${DB_NAME}?user=${DB_USER}@rso-db&password=${DB_PASS}
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: ${DB_USER}
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              value: ${DB_PASS}
+            - name: KUMULUZEE_CONFIG_CONSUL_AGENT
+              value: http://10.244.1.21:8500
           ports:
             - containerPort: 8080
               name: server
               protocol: TCP
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: items-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 8080
       protocol: TCP
