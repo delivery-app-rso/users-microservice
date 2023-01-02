@@ -1,5 +1,5 @@
 kumuluzee:
-  name: items-microservice
+  name: users-microservice
   env:
     name: dev
   version: 1.0.0
@@ -7,7 +7,7 @@ kumuluzee:
     http:
       port: 8080
   datasources:
-    - jndi-name: jdbc/ItemDS
+    - jndi-name: jdbc/UserDS
       connection-url: jdbc:postgresql://localhost:5432/rso_db
       username: dbuser
       password: postgres
@@ -17,7 +17,7 @@ kumuluzee:
     checks:
       data-source-health-check:
         type: liveness
-        jndi-name: jdbc/ItemDS
+        jndi-name: jdbc/UserDS
       disk-space-health-check:
         threshold: 100000000
   metrics:
@@ -25,10 +25,28 @@ kumuluzee:
       enabled: true
       mapping: /metrics
     web-instrumentation:
-      - name: items-endpoint
-        url-pattern: /v1/images/*
+      - name: users-endpoint
+        url-pattern: /v1/users/*
   config:
     start-retry-delay-ms: 500
     max-retry-delay-ms: 900000
     consul:
       agent: http://localhost:8500
+  graphql:
+    schema:
+      include-scalars: true
+      include-schema-definition: true
+      include-directives: true
+      include-introspection-types: true
+    metrics:
+      enabled: true
+  dev:
+    scan-libraries:
+      - users-microservice-services
+      - users-microservice-models
+      - users-microservice-lib
+  rest-client:
+    registrations:
+      - class: mail-process-api
+        url: http://172.26.0.7:8080/v1
+        read-timeout: 5000
