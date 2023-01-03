@@ -81,9 +81,9 @@ public class UserResource {
     @APIResponses({
             @APIResponse(responseCode = "200", description = "Users data", content = @Content(schema = @Schema(implementation = User.class, type = SchemaType.ARRAY))) })
     @GET
-    @Path("/deliverers")
-    public Response getDeliverers() {
-        List<User> user = userBean.getDeliverers();
+    @Path("/deliverer")
+    public Response getRandomDeliverer() {
+        User user = userBean.getRandomDeliverer();
 
         return Response.status(Response.Status.OK).entity(user).build();
     }

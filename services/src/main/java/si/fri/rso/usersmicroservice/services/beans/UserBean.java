@@ -1,5 +1,6 @@
 package si.fri.rso.usersmicroservice.services.beans;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.management.RuntimeErrorException;
@@ -23,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -34,11 +36,18 @@ public class UserBean {
 
     private Logger log = Logger.getLogger(UserBean.class.getName());
 
+    private Random rand;
+
     @Inject
     private ServicesBean servicesBean;
 
     @Inject
     private EntityManager em;
+
+    @PostConstruct
+    private void init() {
+        rand = new Random();
+    }
 
     public List<User> getUsers() {
 
@@ -50,12 +59,14 @@ public class UserBean {
         return resultList.stream().map(UserConverter::toDto).collect(Collectors.toList());
     }
 
-    public List<User> getDeliverers() {
+    public User getRandomDeliverer() {
         List<UserEntity> usersEntity = (List<UserEntity>) em
                 .createQuery("SELECT u FROM UserEntity u WHERE u.type=:type")
                 .setParameter("type", 1).getResultList();
 
-        return usersEntity.stream().map(UserConverter::toDto).collect(Collectors.toList());
+        List<User> users = usersEntity.stream().map(UserConverter::toDto).collect(Collectors.toList());
+
+        return users.get(this.rand.nextInt(users.size()));
     }
 
     @Timed

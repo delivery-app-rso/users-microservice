@@ -38,8 +38,8 @@ public class UsersQueries {
     }
 
     @GraphQLQuery
-    public List<User> getDeliverers() {
-        return userBean.getDeliverers();
+    public User getRandomDeliverer() {
+        return userBean.getRandomDeliverer();
     }
 
     @GraphQLQuery
