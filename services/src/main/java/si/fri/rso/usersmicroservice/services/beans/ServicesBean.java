@@ -27,6 +27,8 @@ public class ServicesBean {
 
         userData.put("name", user.getName());
         userData.put("email", user.getEmail());
+        System.out.println("Sending registration email!");
+        System.out.println(userData.toString());
 
         CompletionStage<String> stringCompletionStage = mailProcessApi
                 .sendMailAsynch(new UserMailDto("registration", userData));
