@@ -53,3 +53,9 @@ kumuluzee:
       - class: mail-process-api
         url: http://172.26.0.7:8080/v1
         read-timeout: 5000
+  kumuluzee:
+    cors-filter:
+      annotations:
+        my-resource:
+          allow-origin: "*"
+          allow-subdomains: true
