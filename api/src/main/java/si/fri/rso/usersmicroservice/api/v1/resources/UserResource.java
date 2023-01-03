@@ -64,7 +64,8 @@ public class UserResource {
 
         @Operation(description = "Get user.", summary = "Get user")
         @APIResponses({
-                        @APIResponse(responseCode = "200", description = "User data", content = @Content(schema = @Schema(implementation = User.class))) })
+                        @APIResponse(responseCode = "200", description = "User data", content = @Content(schema = @Schema(implementation = User.class))),
+                        @APIResponse(responseCode = "404", description = "User not found.") })
         @GET
         @Path("/{userId}")
         public Response getUser(
@@ -79,10 +80,10 @@ public class UserResource {
                 return Response.status(Response.Status.OK).entity(user).build();
         }
 
-        @Operation(description = "Add user.", summary = "Add user")
+        @Operation(description = "Register user.", summary = "Add user")
         @APIResponses({
-                        @APIResponse(responseCode = "201", description = "Raiting successfully added."),
-                        @APIResponse(responseCode = "405", description = "Validation error .")
+                        @APIResponse(responseCode = "200", description = "User successfully registered."),
+                        @APIResponse(responseCode = "404", description = "Bad request.")
         })
         @POST
         @Path("/register")
@@ -104,8 +105,9 @@ public class UserResource {
 
         @Operation(description = "Login user.", summary = "Login user")
         @APIResponses({
-                        @APIResponse(responseCode = "201", description = "User successfully logged in."),
-                        @APIResponse(responseCode = "405", description = "Validation error .")
+                        @APIResponse(responseCode = "200", description = "User successfully logged in."),
+                        @APIResponse(responseCode = "405", description = "Bad request."),
+                        @APIResponse(responseCode = "401", description = "Unauthorized access.")
         })
         @POST
         @Path("/login")
@@ -127,7 +129,8 @@ public class UserResource {
 
         @Operation(description = "Update user.", summary = "Update user")
         @APIResponses({
-                        @APIResponse(responseCode = "200", description = "user successfully updated.")
+                        @APIResponse(responseCode = "200", description = "User successfully updated."),
+                        @APIResponse(responseCode = "404", description = "User not found.")
         })
         @PUT
         @Path("{userId}")
@@ -141,7 +144,7 @@ public class UserResource {
                         return Response.status(Response.Status.NOT_FOUND).build();
                 }
 
-                return Response.status(Response.Status.NOT_MODIFIED).build();
+                return Response.status(Response.Status.OK).build();
 
         }
 
