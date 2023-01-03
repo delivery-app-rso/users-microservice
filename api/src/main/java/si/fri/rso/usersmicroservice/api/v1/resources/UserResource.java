@@ -31,135 +31,146 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-        private Logger log = Logger.getLogger(UserResource.class.getName());
+    private Logger log = Logger.getLogger(UserResource.class.getName());
 
-        @Inject
-        private UserBean userBean;
+    @Inject
+    private UserBean userBean;
 
-        @Context
-        protected UriInfo uriInfo;
+    @Context
+    protected UriInfo uriInfo;
 
-        @Operation(description = "Get all users.", summary = "Get all users")
-        @APIResponses({
-                        @APIResponse(responseCode = "200", description = "List of users", content = @Content(schema = @Schema(implementation = User.class, type = SchemaType.ARRAY)), headers = {
-                                        @Header(name = "X-Total-Count", description = "Number of objects in list") }) })
-        @GET
-        public Response getUsers() {
+    @Operation(description = "Get all users.", summary = "Get all users")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "List of users", content = @Content(schema = @Schema(implementation = User.class, type = SchemaType.ARRAY)), headers = {
+                    @Header(name = "X-Total-Count", description = "Number of objects in list") }) })
+    @GET
+    public Response getUsers() {
 
-                List<User> usersMetadata = userBean.getUserFilter(uriInfo);
+        List<User> usersMetadata = userBean.getUserFilter(uriInfo);
 
-                return Response.status(Response.Status.OK).entity(usersMetadata).build();
+        return Response.status(Response.Status.OK).entity(usersMetadata).build();
+    }
+
+    @Operation(description = "Get status", summary = "Get status")
+    @APIResponses({ @APIResponse(responseCode = "200", description = "status") })
+    @GET
+    @Path("/status")
+    public Response getStatus() {
+        return Response.status(Response.Status.OK).build();
+    }
+
+    @Operation(description = "Get user.", summary = "Get user")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User data", content = @Content(schema = @Schema(implementation = User.class))),
+            @APIResponse(responseCode = "404", description = "User not found.") })
+    @GET
+    @Path("/{userId}")
+    public Response getUser(
+            @Parameter(description = "user ID.", required = true) @PathParam("userId") Integer userId) {
+
+        User user = userBean.getUser(userId);
+
+        if (user == null) {
+            Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        @Operation(description = "Get status", summary = "Get status")
-        @APIResponses({ @APIResponse(responseCode = "200", description = "status") })
-        @GET
-        @Path("/status")
-        public Response getStatus() {
-                return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.OK).entity(user).build();
+    }
+
+    @Operation(description = "Get delivery users.", summary = "Get delivery user")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Users data", content = @Content(schema = @Schema(implementation = User.class, type = SchemaType.ARRAY))) })
+    @GET
+    @Path("/deliverers")
+    public Response getDeliverers() {
+        List<User> user = userBean.getDeliverers();
+
+        return Response.status(Response.Status.OK).entity(user).build();
+    }
+
+    @Operation(description = "Register user.", summary = "Add user")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User successfully registered."),
+            @APIResponse(responseCode = "404", description = "Bad request.")
+    })
+    @POST
+    @Path("/register")
+    public Response register(
+            @RequestBody(description = "DTO object with user data.", required = true, content = @Content(schema = @Schema(implementation = User.class))) User user) {
+
+        if (user.getName() == null || user.getEmail() == null || user.getPassword() == null
+                || user.getAddress() == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        @Operation(description = "Get user.", summary = "Get user")
-        @APIResponses({
-                        @APIResponse(responseCode = "200", description = "User data", content = @Content(schema = @Schema(implementation = User.class))),
-                        @APIResponse(responseCode = "404", description = "User not found.") })
-        @GET
-        @Path("/{userId}")
-        public Response getUser(
-                        @Parameter(description = "user ID.", required = true) @PathParam("userId") Integer userId) {
+        user = userBean.register(user);
 
-                User user = userBean.getUser(userId);
+        return Response.status(Response.Status.OK).entity(user).build();
 
-                if (user == null) {
-                        Response.status(Response.Status.NOT_FOUND).build();
-                }
+    }
 
-                return Response.status(Response.Status.OK).entity(user).build();
+    @Operation(description = "Login user.", summary = "Login user")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User successfully logged in."),
+            @APIResponse(responseCode = "405", description = "Bad request."),
+            @APIResponse(responseCode = "401", description = "Unauthorized access.")
+    })
+    @POST
+    @Path("/login")
+    public Response login(
+            @RequestBody(description = "DTO object with user data.", required = true, content = @Content(schema = @Schema(implementation = UserLoginDto.class))) UserLoginDto UserLoginDto) {
+
+        if (UserLoginDto.getEmail() == null || UserLoginDto.getPassword() == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        @Operation(description = "Register user.", summary = "Add user")
-        @APIResponses({
-                        @APIResponse(responseCode = "200", description = "User successfully registered."),
-                        @APIResponse(responseCode = "404", description = "Bad request.")
-        })
-        @POST
-        @Path("/register")
-        public Response register(
-                        @RequestBody(description = "DTO object with user data.", required = true, content = @Content(schema = @Schema(implementation = User.class))) User user) {
+        User user = userBean.login(UserLoginDto);
 
-                if (user.getName() == null || user.getEmail() == null || user.getPassword() == null
-                                || user.getAddress() == null) {
-                        return Response.status(Response.Status.BAD_REQUEST).build();
-                }
+        if (user == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            return Response.status(Response.Status.OK).entity(user).build();
+        }
+    }
 
-                user = userBean.register(user);
+    @Operation(description = "Update user.", summary = "Update user")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User successfully updated."),
+            @APIResponse(responseCode = "404", description = "User not found.")
+    })
+    @PUT
+    @Path("{userId}")
+    public Response putUser(
+            @Parameter(description = "User ID.", required = true) @PathParam("userId") Integer userId,
+            @RequestBody(description = "DTO object with user.", required = true, content = @Content(schema = @Schema(implementation = User.class))) User user) {
 
-                return Response.status(Response.Status.OK).entity(user).build();
+        user = userBean.putUser(userId, user);
 
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        @Operation(description = "Login user.", summary = "Login user")
-        @APIResponses({
-                        @APIResponse(responseCode = "200", description = "User successfully logged in."),
-                        @APIResponse(responseCode = "405", description = "Bad request."),
-                        @APIResponse(responseCode = "401", description = "Unauthorized access.")
-        })
-        @POST
-        @Path("/login")
-        public Response login(
-                        @RequestBody(description = "DTO object with user data.", required = true, content = @Content(schema = @Schema(implementation = UserLoginDto.class))) UserLoginDto UserLoginDto) {
+        return Response.status(Response.Status.OK).build();
 
-                if (UserLoginDto.getEmail() == null || UserLoginDto.getPassword() == null) {
-                        return Response.status(Response.Status.BAD_REQUEST).build();
-                }
+    }
 
-                User user = userBean.login(UserLoginDto);
+    @Operation(description = "Delete user.", summary = "Delete user")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "User successfully deleted."),
+            @APIResponse(responseCode = "404", description = "Not found.")
+    })
+    @DELETE
+    @Path("{userId}")
+    public Response deleteUser(
+            @Parameter(description = "Rating ID.", required = true) @PathParam("userId") Integer userId) {
 
-                if (user == null) {
-                        return Response.status(Response.Status.UNAUTHORIZED).build();
-                } else {
-                        return Response.status(Response.Status.OK).entity(user).build();
-                }
+        boolean deleted = userBean.deleteUser(userId);
+
+        if (deleted) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-
-        @Operation(description = "Update user.", summary = "Update user")
-        @APIResponses({
-                        @APIResponse(responseCode = "200", description = "User successfully updated."),
-                        @APIResponse(responseCode = "404", description = "User not found.")
-        })
-        @PUT
-        @Path("{userId}")
-        public Response putUser(
-                        @Parameter(description = "User ID.", required = true) @PathParam("userId") Integer userId,
-                        @RequestBody(description = "DTO object with user.", required = true, content = @Content(schema = @Schema(implementation = User.class))) User user) {
-
-                user = userBean.putUser(userId, user);
-
-                if (user == null) {
-                        return Response.status(Response.Status.NOT_FOUND).build();
-                }
-
-                return Response.status(Response.Status.OK).build();
-
-        }
-
-        @Operation(description = "Delete user.", summary = "Delete user")
-        @APIResponses({
-                        @APIResponse(responseCode = "200", description = "User successfully deleted."),
-                        @APIResponse(responseCode = "404", description = "Not found.")
-        })
-        @DELETE
-        @Path("{userId}")
-        public Response deleteUser(
-                        @Parameter(description = "Rating ID.", required = true) @PathParam("userId") Integer userId) {
-
-                boolean deleted = userBean.deleteUser(userId);
-
-                if (deleted) {
-                        return Response.status(Response.Status.NO_CONTENT).build();
-                } else {
-                        return Response.status(Response.Status.NOT_FOUND).build();
-                }
-        }
+    }
 
 }

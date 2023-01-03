@@ -38,6 +38,11 @@ public class UsersQueries {
     }
 
     @GraphQLQuery
+    public List<User> getDeliverers() {
+        return userBean.getDeliverers();
+    }
+
+    @GraphQLQuery
     public User loginUser(@GraphQLArgument(name = "user") UserLoginDto userLoginDto) {
         return userBean.login(userLoginDto);
     }

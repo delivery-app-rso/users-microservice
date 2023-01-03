@@ -50,6 +50,14 @@ public class UserBean {
         return resultList.stream().map(UserConverter::toDto).collect(Collectors.toList());
     }
 
+    public List<User> getDeliverers() {
+        List<UserEntity> usersEntity = (List<UserEntity>) em
+                .createQuery("SELECT u FROM UserEntity u WHERE u.type=:type")
+                .setParameter("type", 1).getResultList();
+
+        return usersEntity.stream().map(UserConverter::toDto).collect(Collectors.toList());
+    }
+
     @Timed
     public List<User> getUserFilter(UriInfo uriInfo) {
 
