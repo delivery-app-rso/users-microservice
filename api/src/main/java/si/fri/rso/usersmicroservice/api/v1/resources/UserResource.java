@@ -39,9 +39,6 @@ public class UserResource {
         @Context
         protected UriInfo uriInfo;
 
-        @Inject
-        private ServicesBean servicesBean;
-
         @Operation(description = "Get all users.", summary = "Get all users")
         @APIResponses({
                         @APIResponse(responseCode = "200", description = "List of users", content = @Content(schema = @Schema(implementation = User.class, type = SchemaType.ARRAY)), headers = {
@@ -96,8 +93,6 @@ public class UserResource {
                 }
 
                 user = userBean.register(user);
-
-                servicesBean.sendRegistrationSuccessEmail(user);
 
                 return Response.status(Response.Status.OK).entity(user).build();
 

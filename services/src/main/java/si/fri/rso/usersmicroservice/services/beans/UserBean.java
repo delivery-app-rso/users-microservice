@@ -35,6 +35,9 @@ public class UserBean {
     private Logger log = Logger.getLogger(UserBean.class.getName());
 
     @Inject
+    private ServicesBean servicesBean;
+
+    @Inject
     private EntityManager em;
 
     public List<User> getUsers() {
@@ -82,7 +85,11 @@ public class UserBean {
             throw new RuntimeException("Entity was not persisted");
         }
 
-        return UserConverter.toDto(userEntity);
+        user = UserConverter.toDto(userEntity);
+
+        servicesBean.sendRegistrationSuccessEmail(user);
+
+        return user;
     }
 
     public User login(UserLoginDto userLoginDto) {
